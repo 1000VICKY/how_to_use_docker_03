@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+    app:
+        build: "./docker-file"
+        ports:
+            - "11180:80"
+        volumes:
+            - "./source-file:/var/www/html"
+        links:
+            - "mysql:mysql"
+            - "postgres:postgres"
+    postgres:
+      image: postgres:9.4
+      environment:
+        POSTGRES_USER: my_application
+        POSTGRES_PASSWORD: my_application
+      restart: always
+      ports:
+        - "5432:5432"
+      volumes:
+        - "postgres_db:/var/lib/postgresql/data"
+        - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    mysql:
+      image: mysql:5.7.22
+      volumes:
+        - "./mysql-data:/var/lib/mysql"
+        - "./mysql-cnf:/etc/mysql/conf.d"
+      ports:
+        - "3306:3306"
+      environment:
+        # アプリケーションから利用するユーザー
+        - MYSQL_DATABASE=my_application
+        - MYSQL_USER=my_application
+        - MYSQL_PASSWORD=my_application
+        # root パスワード
+        - MYSQL_ROOT_PASSWORD=root_password
+volumes:
+  postgres_db:
+    external: true
