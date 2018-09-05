@@ -1,5 +1,9 @@
+
 <?php
 
+$obj = new Redis();
+var_dump($obj->connect("127.0.0.1", 6379));
+var_dump($obj->ping());
 require_once("./configure.php");
 phpinfo();
 try {

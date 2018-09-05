@@ -5,6 +5,7 @@ services:
         build: "./docker-file"
         ports:
             - "11180:80"
+            - "6379:6379"
         volumes:
             - "./source-file:/var/www/html"
         links:
